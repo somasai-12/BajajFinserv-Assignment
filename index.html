@@ -70,8 +70,6 @@
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        
-        // The reference to the id has been corrected here
         const fullName = document.getElementById("fullName").value.trim();
         const email = document.getElementById("email").value.trim();
         const rollNumber = document
@@ -88,7 +86,6 @@
         const dataArray = dataInput.split(",").map((item) => item.trim());
 
         try {
-          // Remember to replace this URL with your hosted API endpoint when you deploy
           const res = await fetch("https://bajajfinserv-assignment-hxl7.onrender.com/bfhl", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
