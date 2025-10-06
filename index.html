@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BFHL API Client</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f3f3f3;
+      }
+      form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 350px;
+      }
+      input,
+      textarea,
+      button {
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        font-size: 16px;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #00ff99;
+        padding: 10px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>BFHL API Tester</h2>
+
+    <form id="bfhlForm">
+      <label>Full Name:</label>
+      <input type="text" id="fullName" required />
+
+      <label>Email:</label>
+      <input type="email" id="email" required />
+
+      <label>College Roll Number:</label>
+      <input type="text" id="rollNumber" required />
+
+      <label>Date of Birth (ddmmyyyy):</label>
+      <input
+        type="text"
+        id="dob"
+        pattern="\d{8}"
+        title="Please enter in DDMMYYYY format (e.g., 11082005)"
+        required
+      />
+
+      <label>Enter Array (comma-separated):</label>
+      <textarea id="data" placeholder="e.g. 1,2,a,b,*,3" required></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <h3>Response:</h3>
+    <pre id="response"></pre>
+
+    <script>
+      const form = document.getElementById("bfhlForm");
+      const responseBox = document.getElementById("response");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // The reference to the id has been corrected here
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const rollNumber = document
+          .getElementById("rollNumber")
+          .value.trim();
+        const dob = document.getElementById("dob").value.trim();
+        const dataInput = document.getElementById("data").value.trim();
+
+        if (!dataInput) {
+          alert("Please enter the array values.");
+          return;
+        }
+
+        const dataArray = dataInput.split(",").map((item) => item.trim());
+
+        try {
+          // Remember to replace this URL with your hosted API endpoint when you deploy
+          const res = await fetch("http://localhost:3000/bfhl", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              data: dataArray,
+              fullName,
+              email,
+              rollNumber,
+              dob,
+            }),
+          });
+
+          const result = await res.json();
+          responseBox.textContent = JSON.stringify(result, null, 2);
+        } catch (error) {
+          responseBox.textContent = "Error: " + error.message;
+        }
+      });
+    </script>
+  </body>
+</html>
